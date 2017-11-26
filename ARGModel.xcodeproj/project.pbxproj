@@ -10,6 +10,7 @@
 		84CC8D851FC9AB24001A9E97 /* ARGModel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84CC8D7B1FC9AB24001A9E97 /* ARGModel.framework */; };
 		84CC8D8A1FC9AB24001A9E97 /* ARGModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CC8D891FC9AB24001A9E97 /* ARGModelTests.swift */; };
 		84CC8D8C1FC9AB24001A9E97 /* ARGModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CC8D7E1FC9AB24001A9E97 /* ARGModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		84EEDAB51FCAB9CF00185D9B /* ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EEDAB41FCAB9CF00185D9B /* ARGModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		84CC8D841FC9AB24001A9E97 /* ARGModelTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ARGModelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		84CC8D891FC9AB24001A9E97 /* ARGModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModelTests.swift; sourceTree = "<group>"; };
 		84CC8D8B1FC9AB24001A9E97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84EEDAB41FCAB9CF00185D9B /* ARGModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 			children = (
 				84CC8D7E1FC9AB24001A9E97 /* ARGModel.h */,
 				84CC8D7F1FC9AB24001A9E97 /* Info.plist */,
+				84EEDAB41FCAB9CF00185D9B /* ARGModel.swift */,
 			);
 			path = ARGModel;
 			sourceTree = "<group>";
@@ -148,6 +151,7 @@
 				TargetAttributes = {
 					84CC8D7A1FC9AB24001A9E97 = {
 						CreatedOnToolsVersion = 9.1;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 					};
 					84CC8D831FC9AB24001A9E97 = {
@@ -196,6 +200,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84EEDAB51FCAB9CF00185D9B /* ARGModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,7 +272,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -321,7 +326,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -334,6 +339,7 @@
 		84CC8D901FC9AB24001A9E97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -346,6 +352,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.argentum.ARGModel;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -354,6 +361,7 @@
 		84CC8D911FC9AB24001A9E97 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -374,6 +382,7 @@
 		84CC8D931FC9AB24001A9E97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ARGModelTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -387,6 +396,7 @@
 		84CC8D941FC9AB24001A9E97 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ARGModelTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
