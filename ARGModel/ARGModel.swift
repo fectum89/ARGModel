@@ -13,12 +13,12 @@ public class ARGModel: NSObject {
     
     public static let sharedInstance = ARGModel()
     
+    public static let viewContext = ARGModel.sharedInstance.persistentContainer.viewContext
+    
     public class func initialize(stores: [NSPersistentStoreDescription]) {
         self.sharedInstance.persistentContainer.persistentStoreDescriptions = stores
         self.sharedInstance.loadStores(self.sharedInstance.persistentContainer)
     }
-    
-    public static let viewContext = ARGModel.sharedInstance.persistentContainer.viewContext
     
     public class func backgroundTask(_ block : @escaping (NSManagedObjectContext) -> Void) {
         self.sharedInstance.persistentContainer.performBackgroundTask(block)
@@ -28,7 +28,7 @@ public class ARGModel: NSObject {
         return self.sharedInstance.persistentContainer.newBackgroundContext()
     }
     
-    public class func save (_ context: NSManagedObjectContext) {
+    public class func save(_ context: NSManagedObjectContext) {
         if context.hasChanges {
             do {
                 try context.save()
