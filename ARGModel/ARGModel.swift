@@ -83,4 +83,26 @@ public class ARGModel: NSObject {
         
         return container
     }()
+    
+    public class func addListener(_ listener: AnyObject, forClasses classes: [AnyClass]) {
+        for klass in classes {
+            print(NSStringFromClass(klass))
+        }
+    }
+    
+    public class func addListener(_ listener: AnyObject, forObject object: NSManagedObject) {
+        
+    }
+}
+
+extension NSObject {
+    public func watch(for classes: [NSManagedObject.Type]) {
+        for klass in classes {
+            print(NSStringFromClass(klass))
+        }
+    }
+    
+    public func watch(for object: NSManagedObject) {
+        
+    }
 }
