@@ -11,14 +11,13 @@ import CoreData
 
 open class ARGBaseManagedObject: NSManagedObject {
     
-    open class func create(in context: NSManagedObjectContext) -> NSManagedObject? {
-        var object: NSManagedObject? = nil
-        
-        context.performAndWait {
-            object = NSEntityDescription.insertNewObject(forEntityName: self.entityName(), into: context)
-        }
-        
-        return object
+    open class func create(in context: NSManagedObjectContext) -> Self {
+        return ARGBaseManagedObject.create(in: context, entityName: self.entityName(), type: self)
+    }
+    
+    private class func create<T>(in context: NSManagedObjectContext, entityName: String, type: T.Type) -> T {
+        let object = NSEntityDescription.insertNewObject(forEntityName: entityName, into: context)
+        return object as! T
     }
     
     open class func entityName() -> String {

@@ -95,6 +95,12 @@ public class ARGModel: NSObject {
     }
 }
 
+extension NSPersistentStoreDescription {
+//    public class func appDataStoreDescription () -> Self {
+//        
+//    }
+}
+
 extension NSObject {
     public func watch(for classes: [NSManagedObject.Type]) {
         for klass in classes {

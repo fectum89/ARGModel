@@ -1,16 +1,14 @@
 //
-//  ARGModelTests.swift
+//  ARGBaseManagedObjectTests.swift
 //  ARGModelTests
 //
-//  Created by Admin on 25/11/2017.
+//  Created by Admin on 30/11/2017.
 //  Copyright © 2017 Argentum. All rights reserved.
 //
 
 import XCTest
-import CoreData
-@testable import ARGModel
 
-class ARGModelTests: XCTestCase {
+class ARGBaseManagedObjectTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -22,10 +20,7 @@ class ARGModelTests: XCTestCase {
         super.tearDown()
     }
     
-    func testInitialize() {
-        let store: NSPersistentStoreDescription = NSPersistentStoreDescription
-        ARGModel.initialize(stores: <#T##[NSPersistentStoreDescription]#>)
-        
+    func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
