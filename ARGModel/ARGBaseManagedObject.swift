@@ -25,11 +25,15 @@ open class ARGBaseManagedObject: NSManagedObject {
         return fullName.components(separatedBy: ".").last!
     }
     
-    public class func fetchAllObjects(in context: NSManagedObjectContext) -> Array<NSManagedObject>? {
+    public class func fetchAllObjects(in context: NSManagedObjectContext) -> Array<Any>? {
         return self.fetchObjects(in: context, predicate: nil)
     }
     
-    public class func fetchObjects(in context: NSManagedObjectContext, predicate: NSPredicate?) -> Array<NSManagedObject>? {
+//    public class func fetchAllObjects<T>(in context: NSManagedObjectContext, type: T.Type) -> Array<T>? {
+//        return self.fetchObjects(in: context, predicate: nil) as? [T]
+//    }
+//
+    public class func fetchObjects(in context: NSManagedObjectContext, predicate: NSPredicate?) -> Array<Any>? {
         let request: NSFetchRequest = NSFetchRequest<NSManagedObject>(entityName: self.entityName())
         request.predicate = predicate
         

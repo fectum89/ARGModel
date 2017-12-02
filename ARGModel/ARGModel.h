@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@import CoreData;
+
+
 //! Project version number for ARGModel.
 FOUNDATION_EXPORT double ARGModelVersionNumber;
 

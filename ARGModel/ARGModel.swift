@@ -9,15 +9,27 @@
 import UIKit
 import CoreData
 
-public class ARGModel: NSObject {
+public class ARGModelConfiguration {
+    public var stores: [NSPersistentStoreDescription]?
+    public var entityMapping: ((String) -> String)?
+    public var managedObjectModel: NSManagedObjectModel?
+    
+    public init () {
+        
+    }
+}
+
+public class ARGModel {
     
     public static let sharedInstance = ARGModel()
     
+    public var configuration: ARGModelConfiguration?
+    
     public static let viewContext = ARGModel.sharedInstance.persistentContainer.viewContext
     
-    public class func initialize(stores: [NSPersistentStoreDescription]) {
-        self.sharedInstance.persistentContainer.persistentStoreDescriptions = stores
-        self.sharedInstance.loadStores(self.sharedInstance.persistentContainer)
+    public class func setup(configuration: ARGModelConfiguration) {
+        assert(self.sharedInstance.configuration == nil, "Model has been already initialized")
+        self.sharedInstance.configuration = configuration
     }
     
     public class func backgroundTask(_ block : @escaping (NSManagedObjectContext) -> Void) {
@@ -65,17 +77,15 @@ public class ARGModel: NSObject {
     }
 
     lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-         */
-        
+        let configuration = self.configuration ?? ARGModelConfiguration()
         let bundle = Bundle.main
-        let mom = NSManagedObjectModel.mergedModel(from: [bundle])
+        let mom = configuration.managedObjectModel ?? NSManagedObjectModel.mergedModel(from: [bundle])
         let processName = ProcessInfo.processInfo.processName
         let container = NSPersistentContainer(name: processName, managedObjectModel: mom!)
+        
+        if self.configuration?.stores != nil {
+            container.persistentStoreDescriptions = self.configuration!.stores!
+        }
         
         self.loadStores(container)
         
