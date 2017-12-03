@@ -11,7 +11,7 @@ import Foundation
 extension NSManagedObjectContext {
     
     open func create<T: NSManagedObject>(_ type: T.Type) -> T {
-        let entityName = ARGModel.sharedInstance.configuration?.entityMapping?(NSStringFromClass(type)) ?? NSStringFromClass(type)
+        let entityName = ARGModel.sharedInstance.preferences?.entityMapping?(NSStringFromClass(type)) ?? NSStringFromClass(type)
         return NSEntityDescription.insertNewObject(forEntityName: entityName, into: self) as! T
     }
     
@@ -20,7 +20,7 @@ extension NSManagedObjectContext {
     }
     
     public func fetchObjects<T: NSManagedObject>(type: T.Type, predicate: NSPredicate?) -> [T]? {
-        let entityName = ARGModel.sharedInstance.configuration?.entityMapping?(NSStringFromClass(type)) ?? NSStringFromClass(type)
+        let entityName = ARGModel.sharedInstance.preferences?.entityMapping?(NSStringFromClass(type)) ?? NSStringFromClass(type)
         let request = NSFetchRequest<T>(entityName: entityName)
 
         request.predicate = predicate

@@ -9,11 +9,11 @@
 /* Begin PBXBuildFile section */
 		841DE0CA1FCF86B800BDC115 /* ARGBaseManagedObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841DE0C91FCF86B800BDC115 /* ARGBaseManagedObjectTests.swift */; };
 		8449E19A1FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8449E1991FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift */; };
+		845993481FD3D3EA005B5CCD /* ARGModelTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845993471FD3D3EA005B5CCD /* ARGModelTracker.swift */; };
 		84CC8D851FC9AB24001A9E97 /* ARGModel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84CC8D7B1FC9AB24001A9E97 /* ARGModel.framework */; };
 		84CC8D8A1FC9AB24001A9E97 /* ARGModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CC8D891FC9AB24001A9E97 /* ARGModelTests.swift */; };
 		84CC8D8C1FC9AB24001A9E97 /* ARGModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CC8D7E1FC9AB24001A9E97 /* ARGModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		84EEDAB51FCAB9CF00185D9B /* ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EEDAB41FCAB9CF00185D9B /* ARGModel.swift */; };
-		84FE5DE41FCBBA8900A2554F /* ARGBaseManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FE5DE31FCBBA8900A2554F /* ARGBaseManagedObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +29,7 @@
 /* Begin PBXFileReference section */
 		841DE0C91FCF86B800BDC115 /* ARGBaseManagedObjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBaseManagedObjectTests.swift; sourceTree = "<group>"; };
 		8449E1991FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+ARGModel.swift"; sourceTree = "<group>"; };
+		845993471FD3D3EA005B5CCD /* ARGModelTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModelTracker.swift; sourceTree = "<group>"; };
 		84CC8D7B1FC9AB24001A9E97 /* ARGModel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ARGModel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84CC8D7E1FC9AB24001A9E97 /* ARGModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARGModel.h; sourceTree = "<group>"; };
 		84CC8D7F1FC9AB24001A9E97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -36,7 +37,6 @@
 		84CC8D891FC9AB24001A9E97 /* ARGModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModelTests.swift; sourceTree = "<group>"; };
 		84CC8D8B1FC9AB24001A9E97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84EEDAB41FCAB9CF00185D9B /* ARGModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModel.swift; sourceTree = "<group>"; };
-		84FE5DE31FCBBA8900A2554F /* ARGBaseManagedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBaseManagedObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +82,7 @@
 				84CC8D7E1FC9AB24001A9E97 /* ARGModel.h */,
 				84CC8D7F1FC9AB24001A9E97 /* Info.plist */,
 				84EEDAB41FCAB9CF00185D9B /* ARGModel.swift */,
-				84FE5DE31FCBBA8900A2554F /* ARGBaseManagedObject.swift */,
+				845993471FD3D3EA005B5CCD /* ARGModelTracker.swift */,
 				8449E1991FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift */,
 			);
 			path = ARGModel;
@@ -210,7 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84EEDAB51FCAB9CF00185D9B /* ARGModel.swift in Sources */,
-				84FE5DE41FCBBA8900A2554F /* ARGBaseManagedObject.swift in Sources */,
+				845993481FD3D3EA005B5CCD /* ARGModelTracker.swift in Sources */,
 				8449E19A1FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

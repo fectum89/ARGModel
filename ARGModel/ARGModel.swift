@@ -9,13 +9,14 @@
 import UIKit
 import CoreData
 
-public class ARGModelConfiguration {
+public class ARGModelPreferences {
     public var stores: [NSPersistentStoreDescription]?
     public var entityMapping: ((String) -> String)?
     public var managedObjectModel: NSManagedObjectModel?
     
-    public init () {
-        
+    public init() {
+        let bundle = Bundle.main
+        self.managedObjectModel = NSManagedObjectModel.mergedModel(from: [bundle])
     }
 }
 
@@ -23,15 +24,17 @@ public class ARGModel {
     
     public static let sharedInstance = ARGModel()
     
-    public var configuration: ARGModelConfiguration?
+    public var preferences: ARGModelPreferences?
     
     public static let viewContext = ARGModel.sharedInstance.persistentContainer.viewContext
     
-    public class func setup(configuration: ARGModelConfiguration) {
-        assert(self.sharedInstance.configuration == nil, "Model has been already initialized")
-        self.sharedInstance.configuration = configuration
-    }
+    public static let tracker = ARGModelTracker()
     
+    public class func configure(preferences: ARGModelPreferences) {
+        assert(self.sharedInstance.preferences == nil, "Model has been already initialized")
+        self.sharedInstance.preferences = preferences
+    }
+
     public class func backgroundTask(_ block : @escaping (NSManagedObjectContext) -> Void) {
         self.sharedInstance.persistentContainer.performBackgroundTask(block)
     }
@@ -77,14 +80,12 @@ public class ARGModel {
     }
 
     lazy var persistentContainer: NSPersistentContainer = {
-        let configuration = self.configuration ?? ARGModelConfiguration()
-        let bundle = Bundle.main
-        let mom = configuration.managedObjectModel ?? NSManagedObjectModel.mergedModel(from: [bundle])
+        let preferences = self.preferences ?? ARGModelPreferences()
         let processName = ProcessInfo.processInfo.processName
-        let container = NSPersistentContainer(name: processName, managedObjectModel: mom!)
+        let container = NSPersistentContainer(name: processName, managedObjectModel: preferences.managedObjectModel!)
         
-        if self.configuration?.stores != nil {
-            container.persistentStoreDescriptions = self.configuration!.stores!
+        if self.preferences?.stores != nil {
+            container.persistentStoreDescriptions = self.preferences!.stores!
         }
         
         self.loadStores(container)
@@ -109,16 +110,4 @@ extension NSPersistentStoreDescription {
 //    public class func appDataStoreDescription () -> Self {
 //        
 //    }
-}
-
-extension NSObject {
-    public func watch(for classes: [NSManagedObject.Type]) {
-        for klass in classes {
-            print(NSStringFromClass(klass))
-        }
-    }
-    
-    public func watch(for object: NSManagedObject) {
-        
-    }
 }
