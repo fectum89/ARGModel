@@ -10,40 +10,64 @@ import UIKit
 import CoreData
 
 public class ARGModelPreferences {
+    
     public var stores: [NSPersistentStoreDescription]?
+    
     public var entityMapping: ((String) -> String)?
+    
     public var managedObjectModel: NSManagedObjectModel?
     
     public init() {
         let bundle = Bundle.main
         self.managedObjectModel = NSManagedObjectModel.mergedModel(from: [bundle])
     }
+    
 }
 
 public class ARGModel {
     
-    public static let sharedInstance = ARGModel()
+    public static let shared = ARGModel(preferences: ARGModelPreferences())
     
-    public var preferences: ARGModelPreferences?
+    public private(set) var preferences: ARGModelPreferences
     
-    public static let viewContext = ARGModel.sharedInstance.persistentContainer.viewContext
+    public private(set) var viewContext: NSManagedObjectContext
     
-    public static let tracker = ARGModelTracker()
+    public private(set) var tracker: ARGModelTracker
+    
+    var persistentContainer: NSPersistentContainer
+    
+    init(preferences: ARGModelPreferences?) {
+        self.preferences = preferences ?? ARGModelPreferences()
+        tracker = ARGModelTracker()
+        
+        let processName = ProcessInfo.processInfo.processName
+        self.persistentContainer = NSPersistentContainer(name: processName, managedObjectModel: self.preferences.managedObjectModel!)
+        
+        if self.preferences .stores != nil {
+            self.persistentContainer.persistentStoreDescriptions = self.preferences.stores!
+        }
+        
+        self.loadStores(self.persistentContainer)
+        
+        self.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
+        
+        viewContext = self.persistentContainer.viewContext
+    }
     
     public class func configure(preferences: ARGModelPreferences) {
-        assert(self.sharedInstance.preferences == nil, "Model has been already initialized")
-        self.sharedInstance.preferences = preferences
+        //assert(self.shared.preferences == nil, "Model has been already initialized")
+        self.shared.preferences = preferences
     }
 
-    public class func backgroundTask(_ block : @escaping (NSManagedObjectContext) -> Void) {
-        self.sharedInstance.persistentContainer.performBackgroundTask(block)
+    public func backgroundTask(_ block : @escaping (NSManagedObjectContext) -> Void) {
+        persistentContainer.performBackgroundTask(block)
     }
     
-    public class func newBackgroundContext() -> NSManagedObjectContext {
-        return self.sharedInstance.persistentContainer.newBackgroundContext()
+    public func newBackgroundContext() -> NSManagedObjectContext {
+        return persistentContainer.newBackgroundContext()
     }
     
-    public class func save(_ context: NSManagedObjectContext) {
+    public func save(_ context: NSManagedObjectContext) {
         if context.hasChanges {
             do {
                 try context.save()
@@ -79,29 +103,29 @@ public class ARGModel {
         })
     }
 
-    lazy var persistentContainer: NSPersistentContainer = {
-        let preferences = self.preferences ?? ARGModelPreferences()
-        let processName = ProcessInfo.processInfo.processName
-        let container = NSPersistentContainer(name: processName, managedObjectModel: preferences.managedObjectModel!)
-        
-        if self.preferences?.stores != nil {
-            container.persistentStoreDescriptions = self.preferences!.stores!
-        }
-        
-        self.loadStores(container)
-        
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        
-        return container
-    }()
+//    lazy var persistentContainer: NSPersistentContainer = {
+//        let preferences = self.preferences ?? ARGModelPreferences()
+//        let processName = ProcessInfo.processInfo.processName
+//        let container = NSPersistentContainer(name: processName, managedObjectModel: preferences.managedObjectModel!)
+//
+//        if self.preferences?.stores != nil {
+//            container.persistentStoreDescriptions = self.preferences!.stores!
+//        }
+//
+//        self.loadStores(container)
+//
+//        container.viewContext.automaticallyMergesChangesFromParent = true
+//
+//        return container
+//    }()
     
-    public class func addListener(_ listener: AnyObject, forClasses classes: [AnyClass]) {
+    public func addListener(_ listener: AnyObject, forClasses classes: [AnyClass]) {
         for klass in classes {
             print(NSStringFromClass(klass))
         }
     }
     
-    public class func addListener(_ listener: AnyObject, forObject object: NSManagedObject) {
+    public func addListener(_ listener: AnyObject, forObject object: NSManagedObject) {
         
     }
 }
@@ -111,3 +135,4 @@ extension NSPersistentStoreDescription {
 //        
 //    }
 }
+

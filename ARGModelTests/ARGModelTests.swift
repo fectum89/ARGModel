@@ -11,6 +11,7 @@ import CoreData
 @testable import ARGModel
 
 class ARGModelTests: XCTestCase {
+   // var model = ARGModel()
     
     override func setUp() {
         super.setUp()
@@ -23,11 +24,7 @@ class ARGModelTests: XCTestCase {
     }
     
     func testInitialize() {
-        let store: NSPersistentStoreDescription = NSPersistentStoreDescription
-        ARGModel.initialize(stores: <#T##[NSPersistentStoreDescription]#>)
         
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
     func testPerformanceExample() {

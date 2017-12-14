@@ -8,6 +8,24 @@
 
 import UIKit
 
+extension NSObject {
+    public func watch(for classes: [NSManagedObject.Type], _ closure: @escaping () -> ()) {
+        let keys = classes.map { (type) -> String in
+            return NSStringFromClass(type)
+        }
+        
+        ARGModel.shared.tracker.addObserver(self, closure: closure, for: keys)
+    }
+    
+    public func watch(for object: NSManagedObject, _ closure: @escaping () -> ()) {
+        ARGModel.shared.tracker.addObserver(self, closure: closure, for: [object.objectID.uriRepresentation().absoluteString])
+    }
+    
+    public func stopWatching () {
+        ARGModel.shared.tracker.removeObserver(self)
+    }
+}
+
 class ARGObserver : Equatable {
     var object: NSObject?
     var closure: () -> ()
@@ -25,14 +43,14 @@ class ARGObserver : Equatable {
 public class ARGModelTracker {
     var observersDictionary: [String : [ARGObserver]] = [:]
     
-    init() {
+    public init() {
         NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(notification:)), name: Notification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
     }
     
     @objc func contextDidChange(notification: NSNotification) {
         let context = notification.object as? NSManagedObjectContext
         
-        if context == ARGModel.viewContext {
+        if context?.concurrencyType == NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType {
             let inserted = notification.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject>
             let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>
             let deleted = notification.userInfo?[NSDeletedObjectsKey] as? Set<NSManagedObject>
@@ -41,7 +59,7 @@ public class ARGModelTracker {
         }
     }
     
-    func addObserver(_ object: NSObject, closure: @escaping () -> (), for keys: [String]) {
+    public func addObserver(_ object: NSObject, closure: @escaping () -> (), for keys: [String]) {
         assert(Thread.isMainThread, "This API could be used only on main thread")
         let observer = ARGObserver(object: object, closure: closure)
         
@@ -52,7 +70,7 @@ public class ARGModelTracker {
         }
     }
     
-    func removeObserver(_ object: NSObject) {
+    public func removeObserver(_ object: NSObject) {
         for (_, var observers) in self.observersDictionary {
             for observer in observers {
                 if observer.object == object {
@@ -62,7 +80,7 @@ public class ARGModelTracker {
         }
     }
     
-    func postNotifications(for keys: [String]) {
+    public func postNotifications(for keys: [String]) {
         DispatchQueue.main.async {
             var notifiedObservers = [ARGObserver]()
             
@@ -79,23 +97,5 @@ public class ARGModelTracker {
                 }
             }
         }
-    }
-}
-
-extension NSObject {
-    public func watch(for classes: [NSManagedObject.Type], _ closure: @escaping () -> ()) {
-        let keys = classes.map { (type) -> String in
-            return NSStringFromClass(type)
-        }
-
-        ARGModel.tracker.addObserver(self, closure: closure, for: keys)
-    }
-    
-    public func watch(for object: NSManagedObject, _ closure: @escaping () -> ()) {
-        ARGModel.tracker.addObserver(self, closure: closure, for: [object.objectID.uriRepresentation().absoluteString])
-    }
-    
-    public func stopWatching () {
-        ARGModel.tracker.removeObserver(self)
     }
 }
