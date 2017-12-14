@@ -26,45 +26,42 @@ public class ARGModelPreferences {
 
 public class ARGModel {
     
-    public static let shared = ARGModel(preferences: ARGModelPreferences())
+    public static var shared: ARGModel = ARGModel()
     
-    public private(set) var preferences: ARGModelPreferences
-    
-    public private(set) var viewContext: NSManagedObjectContext
-    
-    public private(set) var tracker: ARGModelTracker
-    
-    var persistentContainer: NSPersistentContainer
-    
-    init(preferences: ARGModelPreferences?) {
-        self.preferences = preferences ?? ARGModelPreferences()
-        tracker = ARGModelTracker()
-        
-        let processName = ProcessInfo.processInfo.processName
-        self.persistentContainer = NSPersistentContainer(name: processName, managedObjectModel: self.preferences.managedObjectModel!)
-        
-        if self.preferences .stores != nil {
-            self.persistentContainer.persistentStoreDescriptions = self.preferences.stores!
+    public var preferences: ARGModelPreferences? {
+        willSet {
+            assert(preferences == nil, "Model has been already initialized")
         }
-        
-        self.loadStores(self.persistentContainer)
-        
-        self.persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
-        
-        viewContext = self.persistentContainer.viewContext
     }
     
-    public class func configure(preferences: ARGModelPreferences) {
-        //assert(self.shared.preferences == nil, "Model has been already initialized")
-        self.shared.preferences = preferences
-    }
+    public private(set) var tracker = ARGModelTracker()
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        if self.preferences == nil {
+            self.preferences = ARGModelPreferences()
+        }
 
+        let preferences: ARGModelPreferences! = self.preferences
+        let processName = ProcessInfo.processInfo.processName
+        let persistentContainer = NSPersistentContainer(name: processName, managedObjectModel: preferences.managedObjectModel!)
+
+        persistentContainer.persistentStoreDescriptions = preferences.stores ?? [NSPersistentStoreDescription.userDataStoreDescription()]
+        
+        self.loadStores(persistentContainer)
+
+        return persistentContainer
+    }()
+    
+    public var viewContext: NSManagedObjectContext {
+        return self.persistentContainer.viewContext
+    }
+    
     public func backgroundTask(_ block : @escaping (NSManagedObjectContext) -> Void) {
-        persistentContainer.performBackgroundTask(block)
+        self.persistentContainer.performBackgroundTask(block)
     }
     
     public func newBackgroundContext() -> NSManagedObjectContext {
-        return persistentContainer.newBackgroundContext()
+        return self.persistentContainer.newBackgroundContext()
     }
     
     public func save(_ context: NSManagedObjectContext) {
@@ -98,41 +95,74 @@ public class ARGModel {
             let url: URL? = storeDescription.url
             
             if let url = url {
-                print("Core Data storage has beed added: " + url.path)
+                print("Core Data storage has beed added: " + url.absoluteString)
             }
         })
-    }
-
-//    lazy var persistentContainer: NSPersistentContainer = {
-//        let preferences = self.preferences ?? ARGModelPreferences()
-//        let processName = ProcessInfo.processInfo.processName
-//        let container = NSPersistentContainer(name: processName, managedObjectModel: preferences.managedObjectModel!)
-//
-//        if self.preferences?.stores != nil {
-//            container.persistentStoreDescriptions = self.preferences!.stores!
-//        }
-//
-//        self.loadStores(container)
-//
-//        container.viewContext.automaticallyMergesChangesFromParent = true
-//
-//        return container
-//    }()
-    
-    public func addListener(_ listener: AnyObject, forClasses classes: [AnyClass]) {
-        for klass in classes {
-            print(NSStringFromClass(klass))
-        }
-    }
-    
-    public func addListener(_ listener: AnyObject, forObject object: NSManagedObject) {
         
+        container.viewContext.automaticallyMergesChangesFromParent = true
     }
+    
 }
 
 extension NSPersistentStoreDescription {
-//    public class func appDataStoreDescription () -> Self {
-//        
-//    }
+    public class func appDataStoreDescription () -> NSPersistentStoreDescription {
+        let url = URL(fileURLWithPath: applicationCacheDirectory(), isDirectory: true).appendingPathComponent(databaseFileName())
+        let storeDescription = NSPersistentStoreDescription(url: url)
+        storeDescription.type = NSSQLiteStoreType
+        return storeDescription
+    }
+    
+    public class func userDataStoreDescription () -> NSPersistentStoreDescription {
+        let url = URL(fileURLWithPath: applicationSupportDirectory(), isDirectory: true).appendingPathComponent(databaseFileName())
+        let storeDescription = NSPersistentStoreDescription(url: url)
+        storeDescription.type = NSSQLiteStoreType
+        return storeDescription
+    }
+    
+    public class func transientStoreDescription () -> NSPersistentStoreDescription {
+        let url = URL(string: "memory://storage")
+        let storeDescription = NSPersistentStoreDescription(url: url!)
+        storeDescription.type = NSInMemoryStoreType
+        return storeDescription
+    }
+    
+    
+    private static func applicationSupportDirectory() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)
+        let appSupportDirectory = paths.first!
+        
+        if !FileManager.default.fileExists(atPath: appSupportDirectory) {
+            try! FileManager.default.createDirectory(atPath: appSupportDirectory, withIntermediateDirectories: false, attributes: nil)
+        }
+        
+        let fullDirectoryURL = URL(fileURLWithPath: appSupportDirectory, isDirectory: true).appendingPathComponent((Bundle.main.bundleIdentifier ?? Bundle(for: ARGModel.self).bundleIdentifier!))
+        let fullDirectory = fullDirectoryURL.path
+        
+        if !FileManager.default.fileExists(atPath: fullDirectory) {
+            try! FileManager.default.createDirectory(atPath: fullDirectory, withIntermediateDirectories: false, attributes: nil)
+        }
+        
+        return fullDirectory
+    }
+    
+    private static func applicationCacheDirectory() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
+        let appSupportDirectory = paths.first!
+        
+        let fullDirectoryURL = URL(fileURLWithPath: appSupportDirectory, isDirectory: true).appendingPathComponent((Bundle.main.bundleIdentifier ?? Bundle(for: ARGModel.self).bundleIdentifier!))
+        let fullDirectory = fullDirectoryURL.path
+        
+        if !FileManager.default.fileExists(atPath: fullDirectory) {
+            try! FileManager.default.createDirectory(atPath: fullDirectory, withIntermediateDirectories: false, attributes: nil)
+        }
+        
+        return fullDirectory
+    }
+    
+    fileprivate static func databaseFileName() -> String {
+        var appName = ProcessInfo.processInfo.processName
+        
+        return appName.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) + ".sqlite"
+    }
 }
 

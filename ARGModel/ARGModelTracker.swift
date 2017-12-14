@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension NSObject {
+public extension NSObject {
     public func watch(for classes: [NSManagedObject.Type], _ closure: @escaping () -> ()) {
         let keys = classes.map { (type) -> String in
             return NSStringFromClass(type)

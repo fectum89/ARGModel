@@ -22,7 +22,7 @@ extension NSManagedObjectContext {
     public func fetchObjects<T: NSManagedObject>(type: T.Type, predicate: NSPredicate?) -> [T]? {
         let entityName = ARGModel.shared.preferences?.entityMapping?(NSStringFromClass(type)) ?? NSStringFromClass(type)
         let request = NSFetchRequest<T>(entityName: entityName)
-
+        
         request.predicate = predicate
         
         do {

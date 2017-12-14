@@ -48,14 +48,8 @@ class ARGModelTrackerTests: XCTestCase {
     }
     
     func testImplicitObserving () {
-        let preferences = ARGModelPreferences()
-        
-        preferences.entityMapping = { (className) in
-            let suffixIndex = className.index(className.endIndex, offsetBy: -2)
-            return String(className[..<suffixIndex])
-        }
-        
-        ARGModel.configure(preferences: preferences)
+
+        //ARGModel.configure(preferences: preferences)
     }
     
     func testPerformanceExample() {
