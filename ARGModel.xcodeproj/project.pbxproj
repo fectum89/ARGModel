@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5DAFBDB01FE2613300775AF5 /* ARGModelTestDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAFBDAF1FE2613300775AF5 /* ARGModelTestDataModel.swift */; };
-		841DE0CA1FCF86B800BDC115 /* ARGBaseManagedObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841DE0C91FCF86B800BDC115 /* ARGBaseManagedObjectTests.swift */; };
 		8443B3651FD7710B006A6F91 /* ARGModelTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8443B3641FD7710B006A6F91 /* ARGModelTrackerTests.swift */; };
 		8449E19A1FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8449E1991FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift */; };
 		845993481FD3D3EA005B5CCD /* ARGModelTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845993471FD3D3EA005B5CCD /* ARGModelTracker.swift */; };
@@ -30,7 +29,6 @@
 
 /* Begin PBXFileReference section */
 		5DAFBDAF1FE2613300775AF5 /* ARGModelTestDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModelTestDataModel.swift; sourceTree = "<group>"; };
-		841DE0C91FCF86B800BDC115 /* ARGBaseManagedObjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGBaseManagedObjectTests.swift; sourceTree = "<group>"; };
 		8443B3641FD7710B006A6F91 /* ARGModelTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModelTrackerTests.swift; sourceTree = "<group>"; };
 		8449E1991FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+ARGModel.swift"; sourceTree = "<group>"; };
 		845993471FD3D3EA005B5CCD /* ARGModelTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModelTracker.swift; sourceTree = "<group>"; };
@@ -95,10 +93,9 @@
 		84CC8D881FC9AB24001A9E97 /* ARGModelTests */ = {
 			isa = PBXGroup;
 			children = (
-				5DAFBDAF1FE2613300775AF5 /* ARGModelTestDataModel.swift */,
 				84CC8D891FC9AB24001A9E97 /* ARGModelTests.swift */,
 				8443B3641FD7710B006A6F91 /* ARGModelTrackerTests.swift */,
-				841DE0C91FCF86B800BDC115 /* ARGBaseManagedObjectTests.swift */,
+				5DAFBDAF1FE2613300775AF5 /* ARGModelTestDataModel.swift */,
 				84CC8D8B1FC9AB24001A9E97 /* Info.plist */,
 			);
 			path = ARGModelTests;
@@ -227,7 +224,6 @@
 			files = (
 				5DAFBDB01FE2613300775AF5 /* ARGModelTestDataModel.swift in Sources */,
 				8443B3651FD7710B006A6F91 /* ARGModelTrackerTests.swift in Sources */,
-				841DE0CA1FCF86B800BDC115 /* ARGBaseManagedObjectTests.swift in Sources */,
 				84CC8D8A1FC9AB24001A9E97 /* ARGModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -11,52 +11,69 @@ import XCTest
 
 class ARGModelTrackerTests: XCTestCase {
     var tracker: ARGModelTracker!
-    var object = NSObject()
     
     override func setUp() {
         super.setUp()
-        self.tracker = ARGModelTracker()
+        tracker = ARGModelTracker()
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExplicitObserving() {
-        var invocationCount: Int = 0
+    func testAddObserver() {
+        //arrange
+        let observer1 = NSObject()
+        let observer2 = NSObject()
         
+        //act
+        tracker.addObserver(observer1, for: ["key1", "key2"]) {}
+        tracker.addObserver(observer2, for: ["key1"]) {}
+        
+        //assert
+        let observers1 = tracker.observersDictionary["key1"]
+        let observers2 = tracker.observersDictionary["key2"]
+        
+        XCTAssert(observers1?.count == 2)
+        XCTAssert(observers2?.count == 1)
+        
+        XCTAssert(observers1?[0].object == observer1 && observers1?[1].object == observer2)
+        XCTAssert(observers2?[0].object == observer1)
+    }
+    
+    func testRemoveObserver() {
+        //arrange
+        let object = NSObject()
+        tracker.addObserver(object, for: ["key1"]) {}
+        
+        //act
+        tracker.removeObserver(object)
+        
+        //assert
+        XCTAssert(tracker.observersDictionary["key1"]?.count == 0)
+    }
+    
+    func testPostNotifications() {
+        var invocationCount: Int = 0
+        let observer = NSObject()
         let expect = expectation(description: "observer")
         
         expect.assertForOverFulfill = false
         
-        self.tracker.addObserver(self.object, closure: {
+        self.tracker.addObserver(observer, for: ["key1", "key2"]) {
             invocationCount = invocationCount + 1
             
             XCTAssert(invocationCount == 1)
             
             expect.fulfill()
-        }, for: ["key1", "key2"])
+        }
         
         self.tracker.postNotifications(for: ["key1", "key2"])
         
-        waitForExpectations(timeout: 1) { (error) in
-            if let error = error {
-                XCTFail("Observing timed out : \(error)")
-            }
-        }
+        waitForExpectations(timeout: 1)
     }
+    
     
     func testImplicitObserving () {
 
         //ARGModel.configure(preferences: preferences)
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
     
 }

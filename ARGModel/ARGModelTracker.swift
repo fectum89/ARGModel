@@ -14,11 +14,11 @@ public extension NSObject {
             return NSStringFromClass(type)
         }
         
-        ARGModel.shared.tracker.addObserver(self, closure: closure, for: keys)
+        ARGModel.shared.tracker.addObserver(self, for: keys, closure: closure)
     }
     
     public func watch(for object: NSManagedObject, _ closure: @escaping () -> ()) {
-        ARGModel.shared.tracker.addObserver(self, closure: closure, for: [object.objectID.uriRepresentation().absoluteString])
+        ARGModel.shared.tracker.addObserver(self, for: [object.objectID.uriRepresentation().absoluteString], closure: closure)
     }
     
     public func stopWatching () {
@@ -59,7 +59,7 @@ public class ARGModelTracker {
         }
     }
     
-    public func addObserver(_ object: NSObject, closure: @escaping () -> (), for keys: [String]) {
+    public func addObserver(_ object: NSObject, for keys: [String], closure: @escaping () -> ()) {
         assert(Thread.isMainThread, "This API could be used only on main thread")
         let observer = ARGObserver(object: object, closure: closure)
         
@@ -71,10 +71,11 @@ public class ARGModelTracker {
     }
     
     public func removeObserver(_ object: NSObject) {
-        for (_, var observers) in self.observersDictionary {
+        for (key, var observers) in observersDictionary {
             for observer in observers {
                 if observer.object == object {
                     observers.remove(at: observers.index(of: observer)!)
+                    observersDictionary[key] = observers
                 }
             }
         }
@@ -94,6 +95,8 @@ public class ARGModelTracker {
                             notifiedObservers.append(observer)
                         }
                     }
+                    
+                    self.observersDictionary[key] = observers
                 }
             }
         }

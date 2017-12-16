@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-public class ARGModelPreferences {
+public class ARGModelPreferences: NSCopying {
     
     public var stores: [NSPersistentStoreDescription]?
     
@@ -22,46 +22,48 @@ public class ARGModelPreferences {
         self.managedObjectModel = NSManagedObjectModel.mergedModel(from: [bundle])
     }
     
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let preferences = ARGModelPreferences()
+        preferences.stores = self.stores
+        preferences.entityMapping = self.entityMapping
+        preferences.managedObjectModel = self.managedObjectModel
+        return preferences
+    }
+    
 }
 
 public class ARGModel {
     
     public static var shared: ARGModel = ARGModel()
     
+    var _preferences: ARGModelPreferences?
     public var preferences: ARGModelPreferences? {
-        willSet {
+        set {
             assert(preferences == nil, "Model has been already initialized")
+            _preferences = newValue?.copy() as? ARGModelPreferences
+        }
+        get {
+            return _preferences?.copy() as? ARGModelPreferences
         }
     }
     
     public private(set) var tracker = ARGModelTracker()
     
-    lazy var persistentContainer: NSPersistentContainer = {
-        if self.preferences == nil {
-            self.preferences = ARGModelPreferences()
-        }
-
-        let preferences: ARGModelPreferences! = self.preferences
-        let processName = ProcessInfo.processInfo.processName
-        let persistentContainer = NSPersistentContainer(name: processName, managedObjectModel: preferences.managedObjectModel!)
-
-        persistentContainer.persistentStoreDescriptions = preferences.stores ?? [NSPersistentStoreDescription.userDataStoreDescription()]
-        
-        self.loadStores(persistentContainer)
-
-        return persistentContainer
-    }()
-    
     public var viewContext: NSManagedObjectContext {
-        return self.persistentContainer.viewContext
+        return persistentContainer.viewContext
     }
     
+    public var persistentStoreCoordinator: NSPersistentStoreCoordinator {
+        return persistentContainer.persistentStoreCoordinator
+    }
+    
+    
     public func backgroundTask(_ block : @escaping (NSManagedObjectContext) -> Void) {
-        self.persistentContainer.performBackgroundTask(block)
+        persistentContainer.performBackgroundTask(block)
     }
     
     public func newBackgroundContext() -> NSManagedObjectContext {
-        return self.persistentContainer.newBackgroundContext()
+        return persistentContainer.newBackgroundContext()
     }
     
     public func save(_ context: NSManagedObjectContext) {
@@ -75,20 +77,20 @@ public class ARGModel {
         }
     }
     
-    func loadStores(_ container: NSPersistentContainer) {
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+    public func addStore(_ storeDescription: NSPersistentStoreDescription, completion: @escaping (Error) -> ()) {
+        
+    }
+    
+    public func removeStore(_ storeDescription: NSPersistentStoreDescription, completion: @escaping (Error) -> ()) {
+        
+    }
+    
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = createContainer()
+
+        container.loadPersistentStores(completionHandler: { storeDescription, error in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
             
@@ -100,8 +102,23 @@ public class ARGModel {
         })
         
         container.viewContext.automaticallyMergesChangesFromParent = true
-    }
+        
+        return container
+    }()
     
+    func createContainer() -> NSPersistentContainer {
+        if self.preferences == nil {
+            self.preferences = ARGModelPreferences()
+        }
+        
+        let preferences: ARGModelPreferences! = self.preferences
+        let processName = ProcessInfo.processInfo.processName
+        let persistentContainer = NSPersistentContainer(name: processName, managedObjectModel: preferences.managedObjectModel!)
+        
+        persistentContainer.persistentStoreDescriptions = preferences.stores ?? [NSPersistentStoreDescription.userDataStoreDescription()]
+        
+        return persistentContainer
+    }
 }
 
 extension NSPersistentStoreDescription {
@@ -125,7 +142,6 @@ extension NSPersistentStoreDescription {
         storeDescription.type = NSInMemoryStoreType
         return storeDescription
     }
-    
     
     private static func applicationSupportDirectory() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)
@@ -160,8 +176,7 @@ extension NSPersistentStoreDescription {
     }
     
     fileprivate static func databaseFileName() -> String {
-        var appName = ProcessInfo.processInfo.processName
-        
+        let appName = ProcessInfo.processInfo.processName
         return appName.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) + ".sqlite"
     }
 }
