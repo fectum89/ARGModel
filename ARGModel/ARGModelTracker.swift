@@ -55,7 +55,41 @@ public class ARGModelTracker {
             let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>
             let deleted = notification.userInfo?[NSDeletedObjectsKey] as? Set<NSManagedObject>
             
+            var changesEntities = [String]()
             
+            if inserted != nil {
+                for object in inserted! {
+                    let typeName = NSStringFromClass(type(of: object))
+                    
+                    if !changesEntities.contains(typeName) {
+                        changesEntities.append(typeName)
+                    }
+                }
+            }
+            
+            if updated != nil {
+                for object in updated! {
+                    let typeName = NSStringFromClass(type(of: object))
+                    
+                    if !changesEntities.contains(typeName) {
+                        changesEntities.append(typeName)
+                    }
+                }
+            }
+            
+            if deleted != nil {
+                for object in deleted! {
+                    let typeName = NSStringFromClass(type(of: object))
+                    
+                    if !changesEntities.contains(typeName) {
+                        changesEntities.append(typeName)
+                    }
+                }
+            }
+            
+            if changesEntities.count > 0 {
+                ARGModel.shared.tracker.postNotifications(for: changesEntities)
+            }
         }
     }
     

@@ -11,10 +11,31 @@ import XCTest
 
 class ARGModelTrackerTests: XCTestCase {
     var tracker: ARGModelTracker!
+    var model = ARGModel.shared
     
     override func setUp() {
         super.setUp()
+        
         tracker = ARGModelTracker()
+        
+        if model.preferences == nil {
+            let preferences = ARGModelPreferences()
+            
+            preferences.entityMapping = { className in
+                let suffixIndex = className.index(className.endIndex, offsetBy: -2)
+                return String(className[..<suffixIndex])
+            }
+            
+            preferences.managedObjectModel = ARGModelTestDataModel.testModel()
+            
+            preferences.stores = [NSPersistentStoreDescription.transientStoreDescription()]
+            
+            model.preferences = preferences
+        }
+    }
+    
+    override func tearDown() {
+        self.stopWatching()
     }
     
     func testAddObserver() {
@@ -69,11 +90,22 @@ class ARGModelTrackerTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    
     func testImplicitObserving () {
-
-        //ARGModel.configure(preferences: preferences)
+        //arrange
+        let expect = expectation(description: "observing")
+        
+        self.watch(for: [TestObjectMO.self]) {
+            expect.fulfill()
+        }
+        
+        //act
+        model.backgroundTask { (context) in
+            let _ = context.create(TestObjectMO.self)
+            self.model.save(context)
+        }
+        
+        //assert
+        waitForExpectations(timeout: 1)
     }
-    
     
 }
