@@ -8,11 +8,27 @@
 
 import Foundation
 
+@objc
+extension NSManagedObject {
+    @objc open func onCreate() {
+        
+    }
+    
+    @objc
+    public func assignToConfiguration(_ configuration: String?) {
+        let store = ARGModel.shared.store(for: configuration)
+        self.managedObjectContext?.assign(self, to: store!)
+    }
+}
+
 extension NSManagedObjectContext {
     
     open func create<T: NSManagedObject>(_ type: T.Type) -> T {
         let entityName = ARGModel.shared.preferences?.entityMapping?(NSStringFromClass(type)) ?? NSStringFromClass(type)
-        return NSEntityDescription.insertNewObject(forEntityName: entityName, into: self) as! T
+        let components = entityName.components(separatedBy: ".")
+        let object = NSEntityDescription.insertNewObject(forEntityName: components.last!, into: self) as! T
+        object.onCreate()
+        return object
     }
     
     public func fetchAllObjects<T: NSManagedObject>(_ type: T.Type) -> [T]? {
@@ -43,4 +59,58 @@ extension NSManagedObjectContext {
         
         return nil
     }
+    
+//    @objc
+//    public func assign(_ object: NSManagedObject, to configuration: String?) {
+//        let store = ARGModel.shared.store(for: configuration)
+//        self.assign(object, to: store)
+//    }
 }
+
+//ObjC support
+@available(swift, obsoleted: 1.0)
+public extension NSManagedObjectContext {
+    
+    @objc public func create(type: AnyClass) -> Any {
+        return create(type as! NSManagedObject.Type)
+    }
+    
+    @objc
+    public func fetchAllObjects(_ type: AnyClass) -> [Any]? {
+        return self.fetchObjects(type: type as! NSManagedObject.Type, predicate: nil)
+    }
+    
+//    @objc public func find(objectId: NSManagedObjectID?) -> Any? {
+//        if let objectId = objectId {
+//            return try? self.existingObject(with: objectId)
+//        }
+//        return nil
+//    }
+//
+//    @objc public func findFirst(_ type: AnyClass, key: String, value: Any) -> Any? {
+//        let predicate = NSPredicate(format: "\(key) == %@", argumentArray: [value])
+//        return findFirst(type: type as! NSManagedObject.Type, predicate: predicate)
+//    }
+//
+//    @objc public func find(_ type: AnyClass, key: String, value: Any) -> [Any] {
+//        let predicate = NSPredicate(format: "\(key) == %@", argumentArray: [value])
+//        return find(type: type as! NSManagedObject.Type, predicate: predicate)
+//    }
+//
+//    @objc public func findFirst(_ type: AnyClass, predicate: NSPredicate) -> Any? {
+//        return findFirst(type: type as! NSManagedObject.Type, predicate: predicate)
+//    }
+//
+//    @objc public func find(_ type: AnyClass, predicate: NSPredicate) -> [Any] {
+//        return find(type: type as! NSManagedObject.Type, predicate: predicate)
+//    }
+//
+//    @objc public func objects(ids: [NSManagedObjectID]) -> [NSManagedObject] {
+//        return objectsWith(ids: ids)
+//    }
+//
+//    @objc public func allObjectsFor(_ type: AnyClass) -> [Any] {
+//        return allObjects(type as! NSManagedObject.Type)
+//    }
+}
+

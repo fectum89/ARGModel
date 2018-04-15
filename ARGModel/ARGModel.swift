@@ -9,15 +9,15 @@
 import UIKit
 import CoreData
 
-public class ARGModelPreferences: NSCopying {
+@objc public class ARGModelPreferences: NSObject, NSCopying {
     
-    public var stores: [NSPersistentStoreDescription]?
+    @objc public var stores: [NSPersistentStoreDescription]?
     
-    public var entityMapping: ((String) -> String)?
+    @objc public var entityMapping: ((String) -> String)?
     
-    public var managedObjectModel: NSManagedObjectModel?
+    @objc public var managedObjectModel: NSManagedObjectModel?
     
-    public init() {
+    override public init() {
         let bundle = Bundle.main
         self.managedObjectModel = NSManagedObjectModel.mergedModel(from: [bundle])
     }
@@ -32,12 +32,12 @@ public class ARGModelPreferences: NSCopying {
     
 }
 
-public class ARGModel {
+@objc public class ARGModel: NSObject {
     
-    public static var shared: ARGModel = ARGModel()
+    @objc public static var shared: ARGModel = ARGModel()
     
     var _preferences: ARGModelPreferences?
-    public var preferences: ARGModelPreferences? {
+    @objc public var preferences: ARGModelPreferences? {
         set {
             assert(preferences == nil, "Model has been already initialized")
             _preferences = newValue?.copy() as? ARGModelPreferences
@@ -47,26 +47,26 @@ public class ARGModel {
         }
     }
     
-    public private(set) var tracker = ARGModelTracker()
+    @objc public private(set) var tracker = ARGModelTracker()
     
-    public var viewContext: NSManagedObjectContext {
+    @objc public var viewContext: NSManagedObjectContext {
         return persistentContainer.viewContext
     }
     
-    public var persistentStoreCoordinator: NSPersistentStoreCoordinator {
+    @objc public var persistentStoreCoordinator: NSPersistentStoreCoordinator {
         return persistentContainer.persistentStoreCoordinator
     }
     
     
-    public func backgroundTask(_ block : @escaping (NSManagedObjectContext) -> Void) {
+    @objc public func backgroundTask(_ block : @escaping (NSManagedObjectContext) -> Void) {
         persistentContainer.performBackgroundTask(block)
     }
     
-    public func newBackgroundContext() -> NSManagedObjectContext {
+    @objc public func newBackgroundContext() -> NSManagedObjectContext {
         return persistentContainer.newBackgroundContext()
     }
     
-    public func save(_ context: NSManagedObjectContext) {
+    @objc public func save(_ context: NSManagedObjectContext) {
         if context.hasChanges {
             do {
                 try context.save()
@@ -75,6 +75,16 @@ public class ARGModel {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+    }
+    
+    public func store(for configuration: String?) -> NSPersistentStore? {
+        for store in self.persistentStoreCoordinator.persistentStores {
+            if store.configurationName == configuration {
+                return store
+            }
+        }
+        
+        return nil
     }
     
     public func addStore(_ storeDescription: NSPersistentStoreDescription, completion: @escaping (Error) -> ()) {
@@ -121,7 +131,9 @@ public class ARGModel {
     }
 }
 
+@objc
 extension NSPersistentStoreDescription {
+    @objc
     public class func appDataStoreDescription () -> NSPersistentStoreDescription {
         let url = URL(fileURLWithPath: applicationCacheDirectory(), isDirectory: true).appendingPathComponent(databaseFileName())
         let storeDescription = NSPersistentStoreDescription(url: url)
@@ -129,6 +141,7 @@ extension NSPersistentStoreDescription {
         return storeDescription
     }
     
+    @objc
     public class func userDataStoreDescription () -> NSPersistentStoreDescription {
         let url = URL(fileURLWithPath: applicationSupportDirectory(), isDirectory: true).appendingPathComponent(databaseFileName())
         let storeDescription = NSPersistentStoreDescription(url: url)
@@ -136,6 +149,7 @@ extension NSPersistentStoreDescription {
         return storeDescription
     }
     
+    @objc
     public class func transientStoreDescription () -> NSPersistentStoreDescription {
         let url = URL(string: "memory://storage")
         let storeDescription = NSPersistentStoreDescription(url: url!)
