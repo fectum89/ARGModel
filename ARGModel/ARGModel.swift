@@ -66,7 +66,7 @@ import CoreData
         return persistentContainer.newBackgroundContext()
     }
     
-    @objc public func save(_ context: NSManagedObjectContext) {
+    @objc public func save(_ context: NSManagedObjectContext = ARGModel.shared.viewContext) {
         if context.hasChanges {
             do {
                 try context.save()
