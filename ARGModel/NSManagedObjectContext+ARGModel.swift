@@ -100,7 +100,7 @@ public extension NSManagedObjectContext {
     }
     
     @objc
-    public func fetchObjects(of type: AnyClass, _ configureRequestClosure: (NSFetchRequest<NSManagedObject>) -> ()) -> [Any]? {
+    public func fetchObjects(of type: AnyClass, configureBlock configureRequestClosure: (NSFetchRequest<NSManagedObject>) -> ()) -> [Any]? {
         return self.fetchObjects(type: type as! NSManagedObject.Type, configureRequestClosure)
     }
     
