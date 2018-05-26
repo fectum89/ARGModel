@@ -17,10 +17,10 @@ import CoreData
     
     @objc public var managedObjectModel: NSManagedObjectModel?
     
-    override public init() {
-        let bundle = Bundle.main
-        self.managedObjectModel = NSManagedObjectModel.mergedModel(from: [bundle])
-    }
+//    override public init() {
+//        //let bundle = Bundle.main
+//        //self.managedObjectModel = NSManagedObjectModel.mergedModel(from: [bundle])
+//    }
     
     public func copy(with zone: NSZone? = nil) -> Any {
         let preferences = ARGModelPreferences()
@@ -69,6 +69,7 @@ import CoreData
     @objc public func save(_ context: NSManagedObjectContext = ARGModel.shared.viewContext) {
         if context.hasChanges {
             do {
+                //context.mergePolicy = NSOverwriteMergePolicy
                 try context.save()
             } catch {
                 let nserror = error as NSError
@@ -123,6 +124,12 @@ import CoreData
         
         let preferences: ARGModelPreferences! = self.preferences
         let processName = ProcessInfo.processInfo.processName
+        
+        if preferences.managedObjectModel == nil {
+            let bundle = Bundle.main
+            preferences.managedObjectModel = NSManagedObjectModel.mergedModel(from: [bundle])
+        }
+        
         let persistentContainer = NSPersistentContainer(name: processName, managedObjectModel: preferences.managedObjectModel!)
         
         persistentContainer.persistentStoreDescriptions = preferences.stores ?? [NSPersistentStoreDescription.userDataStoreDescription()]
