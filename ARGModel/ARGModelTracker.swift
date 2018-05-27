@@ -6,7 +6,8 @@
 //  Copyright © 2017 Argentum. All rights reserved.
 //
 
-import UIKit
+import Foundation
+import CoreData
 
 public extension NSObject {
     

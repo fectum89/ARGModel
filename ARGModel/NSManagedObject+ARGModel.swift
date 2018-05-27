@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 extension NSManagedObject {
     @objc open func onCreate() {

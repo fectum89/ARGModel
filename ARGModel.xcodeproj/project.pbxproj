@@ -12,6 +12,11 @@
 		840B82EB20836D1F002732E0 /* NSManagedObject+ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840B82E920836D1F002732E0 /* NSManagedObject+ARGModel.swift */; };
 		8443B3651FD7710B006A6F91 /* ARGModelTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8443B3641FD7710B006A6F91 /* ARGModelTrackerTests.swift */; };
 		8449E19A1FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8449E1991FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift */; };
+		8459799F20BA797A0063203D /* NSManagedObject+ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840B82E920836D1F002732E0 /* NSManagedObject+ARGModel.swift */; };
+		845979A020BA797A0063203D /* ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EEDAB41FCAB9CF00185D9B /* ARGModel.swift */; };
+		845979A120BA797A0063203D /* ARGModelTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845993471FD3D3EA005B5CCD /* ARGModelTracker.swift */; };
+		845979A220BA797A0063203D /* NSManagedObjectContext+ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8449E1991FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift */; };
+		845979A520BA797A0063203D /* ARGModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 84CC8D7E1FC9AB24001A9E97 /* ARGModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		845993481FD3D3EA005B5CCD /* ARGModelTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845993471FD3D3EA005B5CCD /* ARGModelTracker.swift */; };
 		84CC8D851FC9AB24001A9E97 /* ARGModel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84CC8D7B1FC9AB24001A9E97 /* ARGModel.framework */; };
 		84CC8D8A1FC9AB24001A9E97 /* ARGModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CC8D891FC9AB24001A9E97 /* ARGModelTests.swift */; };
@@ -34,6 +39,8 @@
 		840B82E920836D1F002732E0 /* NSManagedObject+ARGModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+ARGModel.swift"; sourceTree = "<group>"; };
 		8443B3641FD7710B006A6F91 /* ARGModelTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModelTrackerTests.swift; sourceTree = "<group>"; };
 		8449E1991FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+ARGModel.swift"; sourceTree = "<group>"; };
+		845979AA20BA797A0063203D /* ARGModel_mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ARGModel_mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		845979AB20BA797A0063203D /* ARGModel copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ARGModel copy-Info.plist"; path = "/Users/admin/Developing/Mine/Auri/ARGModel/ARGModel copy-Info.plist"; sourceTree = "<absolute>"; };
 		845993471FD3D3EA005B5CCD /* ARGModelTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModelTracker.swift; sourceTree = "<group>"; };
 		84CC8D7B1FC9AB24001A9E97 /* ARGModel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ARGModel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84CC8D7E1FC9AB24001A9E97 /* ARGModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARGModel.h; sourceTree = "<group>"; };
@@ -45,6 +52,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		845979A320BA797A0063203D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		84CC8D771FC9AB24001A9E97 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -69,6 +83,7 @@
 				84CC8D7D1FC9AB24001A9E97 /* ARGModel */,
 				84CC8D881FC9AB24001A9E97 /* ARGModelTests */,
 				84CC8D7C1FC9AB24001A9E97 /* Products */,
+				845979AB20BA797A0063203D /* ARGModel copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,6 +92,7 @@
 			children = (
 				84CC8D7B1FC9AB24001A9E97 /* ARGModel.framework */,
 				84CC8D841FC9AB24001A9E97 /* ARGModelTests.xctest */,
+				845979AA20BA797A0063203D /* ARGModel_mac.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,6 +124,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		845979A420BA797A0063203D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				845979A520BA797A0063203D /* ARGModel.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		84CC8D781FC9AB24001A9E97 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -119,6 +143,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		8459799D20BA797A0063203D /* ARGModel_mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 845979A720BA797A0063203D /* Build configuration list for PBXNativeTarget "ARGModel_mac" */;
+			buildPhases = (
+				8459799E20BA797A0063203D /* Sources */,
+				845979A320BA797A0063203D /* Frameworks */,
+				845979A420BA797A0063203D /* Headers */,
+				845979A620BA797A0063203D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ARGModel_mac;
+			productName = ARGModel;
+			productReference = 845979AA20BA797A0063203D /* ARGModel_mac.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		84CC8D7A1FC9AB24001A9E97 /* ARGModel */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 84CC8D8F1FC9AB24001A9E97 /* Build configuration list for PBXNativeTarget "ARGModel" */;
@@ -165,6 +207,9 @@
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = Argentum;
 				TargetAttributes = {
+					8459799D20BA797A0063203D = {
+						ProvisioningStyle = Automatic;
+					};
 					84CC8D7A1FC9AB24001A9E97 = {
 						CreatedOnToolsVersion = 9.1;
 						LastSwiftMigration = 0910;
@@ -190,11 +235,19 @@
 			targets = (
 				84CC8D7A1FC9AB24001A9E97 /* ARGModel */,
 				84CC8D831FC9AB24001A9E97 /* ARGModelTests */,
+				8459799D20BA797A0063203D /* ARGModel_mac */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		845979A620BA797A0063203D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		84CC8D791FC9AB24001A9E97 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -212,6 +265,17 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8459799E20BA797A0063203D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8459799F20BA797A0063203D /* NSManagedObject+ARGModel.swift in Sources */,
+				845979A020BA797A0063203D /* ARGModel.swift in Sources */,
+				845979A120BA797A0063203D /* ARGModelTracker.swift in Sources */,
+				845979A220BA797A0063203D /* NSManagedObjectContext+ARGModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		84CC8D761FC9AB24001A9E97 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -245,6 +309,51 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		845979A820BA797A0063203D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "ARGModel copy-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.argentum.ARGModel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		845979A920BA797A0063203D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "ARGModel copy-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.argentum.ARGModel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		84CC8D8D1FC9AB24001A9E97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -432,6 +541,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		845979A720BA797A0063203D /* Build configuration list for PBXNativeTarget "ARGModel_mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				845979A820BA797A0063203D /* Debug */,
+				845979A920BA797A0063203D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		84CC8D751FC9AB24001A9E97 /* Build configuration list for PBXProject "ARGModel" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

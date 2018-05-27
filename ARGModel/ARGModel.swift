@@ -6,7 +6,6 @@
 //  Copyright © 2017 Argentum. All rights reserved.
 //
 
-import UIKit
 import CoreData
 
 @objc public class ARGModelPreferences: NSObject, NSCopying {
@@ -78,6 +77,7 @@ import CoreData
         }
     }
     
+    @objc
     public func store(for configuration: String?) -> NSPersistentStore? {
         for store in self.persistentStoreCoordinator.persistentStores {
             if store.configurationName == configuration {
@@ -88,19 +88,36 @@ import CoreData
         return nil
     }
     
-    public func addStore(_ storeDescription: NSPersistentStoreDescription, completion: @escaping (Error) -> ()) {
-        
+    @objc
+    public func addStores(_ storeDescriptions: [NSPersistentStoreDescription], completion: @escaping (Error) -> ()) {
+        self.persistentContainer.persistentStoreDescriptions = self.persistentContainer.persistentStoreDescriptions + storeDescriptions
+        loadStores()
     }
     
+    @objc
     public func removeStore(_ storeDescription: NSPersistentStoreDescription, completion: @escaping (Error) -> ()) {
-        
+        if let store = self.store(for: storeDescription.configuration) {
+            do {
+                try self.persistentStoreCoordinator.remove(store)
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
     }
-    
     
     lazy var persistentContainer: NSPersistentContainer = {
         let container = createContainer()
 
-        container.loadPersistentStores(completionHandler: { storeDescription, error in
+        loadStores()
+        
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        
+        return container
+    }()
+    
+    func loadStores() {
+        self.persistentContainer.loadPersistentStores(completionHandler: { storeDescription, error in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
@@ -111,11 +128,7 @@ import CoreData
                 print("Core Data storage has beed added: " + url.absoluteString)
             }
         })
-        
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        
-        return container
-    }()
+    }
     
     func createContainer() -> NSPersistentContainer {
         if self.preferences == nil {
