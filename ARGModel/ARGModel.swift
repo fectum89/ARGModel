@@ -102,7 +102,7 @@ import CoreData
     public func addStores(_ storeDescriptions: [NSPersistentStoreDescription]) -> Error? {
         for storeDesc in storeDescriptions {
             do {
-                try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
+                try self.persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                                                                   configurationName: storeDesc.configuration,
                                                                   at: storeDesc.url!,
                                                                   options: storeDesc.options)
