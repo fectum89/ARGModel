@@ -10,7 +10,7 @@ import CoreData
 
 @objc public class ARGModelPreferences: NSObject, NSCopying {
     
-    @objc public var stores: [NSPersistentStoreDescription]?
+    //@objc public var stores: [NSPersistentStoreDescription]?
     
     @objc public var entityMapping: ((String) -> String)?
     
@@ -23,7 +23,7 @@ import CoreData
     
     public func copy(with zone: NSZone? = nil) -> Any {
         let preferences = ARGModelPreferences()
-        preferences.stores = self.stores
+        //preferences.stores = self.stores
         preferences.entityMapping = self.entityMapping
         preferences.managedObjectModel = self.managedObjectModel
         return preferences
@@ -48,27 +48,37 @@ import CoreData
     
     @objc public private(set) var tracker = ARGModelTracker()
     
-    @objc public var viewContext: NSManagedObjectContext {
-        return persistentContainer.viewContext
+    func conditionallySetupDefaultStore() {
+        if persistentStoreCoordinator.persistentStores.count == 0 {
+            let storeDesc = NSPersistentStoreDescription.userDataStoreDescription()
+            storeDesc.shouldAddStoreAsynchronously = true;
+            
+            let _ = addStores([storeDesc])
+        }
     }
     
     @objc public var persistentStoreCoordinator: NSPersistentStoreCoordinator {
         return persistentContainer.persistentStoreCoordinator
     }
     
+    @objc public var viewContext: NSManagedObjectContext {
+        conditionallySetupDefaultStore()
+        return persistentContainer.viewContext
+    }
     
     @objc public func backgroundTask(_ block : @escaping (NSManagedObjectContext) -> Void) {
+        conditionallySetupDefaultStore()
         persistentContainer.performBackgroundTask(block)
     }
     
     @objc public func newBackgroundContext() -> NSManagedObjectContext {
+        conditionallySetupDefaultStore()
         return persistentContainer.newBackgroundContext()
     }
     
     @objc public func save(_ context: NSManagedObjectContext = ARGModel.shared.viewContext) {
         if context.hasChanges {
             do {
-                //context.mergePolicy = NSOverwriteMergePolicy
                 try context.save()
             } catch {
                 let nserror = error as NSError
@@ -89,29 +99,21 @@ import CoreData
     }
     
     @objc
-    public func addStores(_ storeDescriptions: [NSPersistentStoreDescription], completion: @escaping (Error?) -> ()) {
-        let group = DispatchGroup()
-        var lastError: Error?
-        
+    public func addStores(_ storeDescriptions: [NSPersistentStoreDescription]) -> Error? {
         for storeDesc in storeDescriptions {
-            group.enter()
+            do {
+                try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
+                                                                  configurationName: storeDesc.configuration,
+                                                                  at: storeDesc.url!,
+                                                                  options: storeDesc.options)
+            } catch {
+                return error
+            }
             
-            self.persistentStoreCoordinator.addPersistentStore(with: storeDesc, completionHandler: { (storeDesc, error) in
-                if error != nil {
-                    lastError = error
-                }
+            print("Core Data storage has beed added: " + storeDesc.url!.absoluteString)
+        }
 
-                if let url = storeDesc.url {
-                    print("Core Data storage has beed added: " + url.absoluteString)
-                }
-                
-                group.leave()
-            })
-        }
-        
-        group.notify(queue:  DispatchQueue.main) {
-            completion(lastError)
-        }
+        return nil
     }
     
     @objc
@@ -131,31 +133,31 @@ import CoreData
     lazy var persistentContainer: NSPersistentContainer = {
         let container = createContainer()
 
-        loadStores(container) { error in
-            
-        }
+//        loadStores(container) { error in
+//
+//        }
         
         container.viewContext.automaticallyMergesChangesFromParent = true
         
         return container
     }()
     
-    func loadStores(_ container: NSPersistentContainer, _ completion: @escaping (Error?) -> ()) {
-        container.loadPersistentStores(completionHandler: { storeDescription, error in
-            if let error = error as NSError?, error.code != 134080 { //already added store error
-                completion(error)
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            } else {
-                let url: URL? = storeDescription.url
-                
-                if let url = url {
-                    print("Core Data storage has beed added: " + url.absoluteString)
-                }
-                
-                completion(nil)
-            }
-        })
-    }
+//    func loadStores(_ container: NSPersistentContainer, _ completion: @escaping (Error?) -> ()) {
+//        container.loadPersistentStores(completionHandler: { storeDescription, error in
+//            if let error = error as NSError?, error.code != 134080 { //already added store error
+//                completion(error)
+//                fatalError("Unresolved error \(error), \(error.userInfo)")
+//            } else {
+//                let url: URL? = storeDescription.url
+//
+//                if let url = url {
+//                    print("Core Data storage has beed added: " + url.absoluteString)
+//                }
+//
+//                completion(nil)
+//            }
+//        })
+//    }
     
     func createContainer() -> NSPersistentContainer {
         if self.preferences == nil {
@@ -172,7 +174,7 @@ import CoreData
         
         let persistentContainer = NSPersistentContainer(name: processName, managedObjectModel: preferences.managedObjectModel!)
         
-        persistentContainer.persistentStoreDescriptions = preferences.stores ?? [NSPersistentStoreDescription.userDataStoreDescription()]
+        //persistentContainer.persistentStoreDescriptions = preferences.stores ?? [NSPersistentStoreDescription.userDataStoreDescription()]
         
         return persistentContainer
     }
