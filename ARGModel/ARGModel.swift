@@ -89,18 +89,40 @@ import CoreData
     }
     
     @objc
-    public func addStores(_ storeDescriptions: [NSPersistentStoreDescription], completion: @escaping (Error) -> ()) {
-        self.persistentContainer.persistentStoreDescriptions = self.persistentContainer.persistentStoreDescriptions + storeDescriptions
-        loadStores()
+    public func addStores(_ storeDescriptions: [NSPersistentStoreDescription], completion: @escaping (Error?) -> ()) {
+        let group = DispatchGroup()
+        var lastError: Error?
+        
+        for storeDesc in storeDescriptions {
+            group.enter()
+            
+            self.persistentStoreCoordinator.addPersistentStore(with: storeDesc, completionHandler: { (storeDesc, error) in
+                if error != nil {
+                    lastError = error
+                }
+
+                if let url = storeDesc.url {
+                    print("Core Data storage has beed added: " + url.absoluteString)
+                }
+                
+                group.leave()
+            })
+        }
+        
+        group.notify(queue:  DispatchQueue.main) {
+            completion(lastError)
+        }
     }
     
     @objc
-    public func removeStore(_ storeDescription: NSPersistentStoreDescription, completion: @escaping (Error) -> ()) {
-        if let store = self.store(for: storeDescription.configuration) {
+    public func removeStore(_ configuration: String, completion: @escaping (Error?) -> ()) {
+        if let store = self.store(for: configuration) {
             do {
                 try self.persistentStoreCoordinator.remove(store)
+                completion(nil)
             } catch {
                 let nserror = error as NSError
+                completion(error)
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
@@ -109,23 +131,28 @@ import CoreData
     lazy var persistentContainer: NSPersistentContainer = {
         let container = createContainer()
 
-        loadStores()
+        loadStores(container) { error in
+            
+        }
         
         container.viewContext.automaticallyMergesChangesFromParent = true
         
         return container
     }()
     
-    func loadStores() {
-        self.persistentContainer.loadPersistentStores(completionHandler: { storeDescription, error in
-            if let error = error as NSError? {
+    func loadStores(_ container: NSPersistentContainer, _ completion: @escaping (Error?) -> ()) {
+        container.loadPersistentStores(completionHandler: { storeDescription, error in
+            if let error = error as NSError?, error.code != 134080 { //already added store error
+                completion(error)
                 fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-            
-            let url: URL? = storeDescription.url
-            
-            if let url = url {
-                print("Core Data storage has beed added: " + url.absoluteString)
+            } else {
+                let url: URL? = storeDescription.url
+                
+                if let url = url {
+                    print("Core Data storage has beed added: " + url.absoluteString)
+                }
+                
+                completion(nil)
             }
         })
     }

@@ -102,7 +102,9 @@ class ARGObserver : Equatable {
             }
             
             if changesEntities.count > 0 {
-                ARGModel.shared.tracker.postNotifications(for: changesEntities)
+                DispatchQueue.main.async {
+                    ARGModel.shared.tracker.postNotifications(for: changesEntities)
+                }
             }
         }
     }
