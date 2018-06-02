@@ -51,9 +51,7 @@ import CoreData
     func conditionallySetupDefaultStore() {
         if persistentStoreCoordinator.persistentStores.count == 0 {
             let storeDesc = NSPersistentStoreDescription.userDataStoreDescription()
-            storeDesc.shouldAddStoreAsynchronously = true;
-            
-            let _ = addStores([storeDesc])
+            addStores([storeDesc])
         }
     }
     
@@ -99,13 +97,14 @@ import CoreData
     }
     
     @objc
+    @discardableResult
     public func addStores(_ storeDescriptions: [NSPersistentStoreDescription]) -> Error? {
         for storeDesc in storeDescriptions {
             do {
                 try self.persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
-                                                                  configurationName: storeDesc.configuration,
-                                                                  at: storeDesc.url!,
-                                                                  options: storeDesc.options)
+                                                                       configurationName: storeDesc.configuration,
+                                                                       at: storeDesc.url!,
+                                                                       options: storeDesc.options)
             } catch {
                 return error
             }
