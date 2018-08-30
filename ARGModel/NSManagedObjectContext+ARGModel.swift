@@ -130,6 +130,10 @@ public extension NSManagedObjectContext {
         return objectsWith(ids: ids)
     }
     
+    @objc public func object(forID id: NSManagedObjectID, of type: AnyClass) -> NSManagedObject? {
+        return objectForID(id, type: type as! NSManagedObject.Type)
+    }
+    
 //    @objc public func find(objectId: NSManagedObjectID?) -> Any? {
 //        if let objectId = objectId {
 //            return try? self.existingObject(with: objectId)
