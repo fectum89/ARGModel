@@ -111,6 +111,8 @@ import CoreData
             
             print("Core Data storage has beed added: " + storeDesc.url!.absoluteString)
         }
+        
+        persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
 
         return nil
     }
@@ -131,13 +133,6 @@ import CoreData
     
     lazy var persistentContainer: NSPersistentContainer = {
         let container = createContainer()
-
-//        loadStores(container) { error in
-//
-//        }
-        
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        
         return container
     }()
     
