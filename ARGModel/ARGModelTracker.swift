@@ -12,7 +12,7 @@ import CoreData
 public extension NSObject {
     
     @objc
-    public func watch(for classes: [NSManagedObject.Type], _ closure: @escaping () -> ()) {
+    func watch(for classes: [NSManagedObject.Type], _ closure: @escaping () -> ()) {
         let keys = classes.map { (type) -> String in
             return NSStringFromClass(type)
         }
@@ -20,12 +20,12 @@ public extension NSObject {
         ARGModel.shared.tracker.addObserver(self, for: keys, closure: closure)
     }
     
-    public func watch(for object: NSManagedObject, _ closure: @escaping () -> ()) {
+    func watch(for object: NSManagedObject, _ closure: @escaping () -> ()) {
         ARGModel.shared.tracker.addObserver(self, for: [object.objectID.uriRepresentation().absoluteString], closure: closure)
     }
     
     @objc
-    public func stopWatching () {
+    func stopWatching () {
         ARGModel.shared.tracker.removeObserver(self)
     }
 }
@@ -34,7 +34,7 @@ public extension NSObject {
 @available(swift, obsoleted: 1.0)
 public extension NSObject {
     @objc
-    public func watchForObject(_ object: NSManagedObject, _ closure: @escaping () -> ()) {
+    func watchForObject(_ object: NSManagedObject, _ closure: @escaping () -> ()) {
         ARGModel.shared.tracker.addObserver(self, for: [object.objectID.uriRepresentation().absoluteString], closure: closure)
     }
 }

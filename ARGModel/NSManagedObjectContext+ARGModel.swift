@@ -102,22 +102,22 @@ extension NSManagedObjectContext {
 public extension NSManagedObjectContext {
     
     @objc
-    public func create(type: AnyClass) -> Any {
+    func create(type: AnyClass) -> Any {
         return create(type as! NSManagedObject.Type)
     }
     
     @objc
-    public func fetchAllObjects(of type: AnyClass) -> [Any]? {
+    func fetchAllObjects(of type: AnyClass) -> [Any]? {
         return self.fetchObjects(type: type as! NSManagedObject.Type, predicate: nil)
     }
     
     @objc
-    public func fetchObjects(of type: AnyClass, predicate: NSPredicate) -> [Any]? {
+    func fetchObjects(of type: AnyClass, predicate: NSPredicate) -> [Any]? {
         return self.fetchObjects(type: type as! NSManagedObject.Type, predicate: predicate)
     }
     
     @objc
-    public func count(of: AnyClass) -> Int {
+    func count(of: AnyClass) -> Int {
         return self.countOfObjects(type: of as! NSManagedObject.Type)
     }
     
@@ -126,11 +126,13 @@ public extension NSManagedObjectContext {
 //        return self.fetchObjects(type: type as! NSManagedObject.Type, configureRequestClosure)
 //    }
     
-    @objc public func objects(ids: [NSManagedObjectID]) -> [NSManagedObject] {
+    @objc
+    func objects(ids: [NSManagedObjectID]) -> [NSManagedObject] {
         return objectsWith(ids: ids)
     }
     
-    @objc public func object(forID id: NSManagedObjectID, of type: AnyClass) -> NSManagedObject? {
+    @objc
+    func object(forID id: NSManagedObjectID, of type: AnyClass) -> NSManagedObject? {
         return objectForID(id, type: type as! NSManagedObject.Type)
     }
     
