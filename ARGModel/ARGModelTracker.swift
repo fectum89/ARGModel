@@ -124,7 +124,7 @@ class ARGObserver : Equatable {
         for (key, var observers) in observersDictionary {
             for observer in observers {
                 if observer.object == object {
-                    observers.remove(at: observers.index(of: observer)!)
+                    observers.remove(at: observers.firstIndex(of: observer)!)
                     observersDictionary[key] = observers
                 }
             }
@@ -139,7 +139,7 @@ class ARGObserver : Equatable {
                 if var observers = self.observersDictionary[key] {
                     for observer in observers {
                         if observer.object == nil {
-                            observers.remove(at: observers.index(of: observer)!)
+                            observers.remove(at: observers.firstIndex(of: observer)!)
                         } else if !notifiedObservers.contains(observer) {
                             observer.closure()
                             notifiedObservers.append(observer)
