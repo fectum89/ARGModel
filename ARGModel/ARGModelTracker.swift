@@ -39,22 +39,30 @@ public extension NSObject {
     }
 }
 
+public
 class ARGObserver : Equatable {
-    var object: NSObject?
+    weak var object: NSObject?
     var closure: () -> ()
+    var info: String?
     
     init(object: NSObject, closure: @escaping () -> ()) {
         self.object = object
         self.closure = closure
+        self.info = object.description
     }
     
+    func debugDescription() {
+        print(info ?? "")
+    }
+    
+    public
     static func == (lhs: ARGObserver, rhs: ARGObserver) -> Bool {
         return lhs.object == rhs.object && String(describing: lhs.closure) == String(describing: rhs.closure)
     }
 }
 
 @objc public class ARGModelTracker: NSObject {
-    var observersDictionary: [String : [ARGObserver]] = [:]
+    public var observersDictionary: [String : [ARGObserver]] = [:]
     
     override public init() {
         super.init()
@@ -116,6 +124,15 @@ class ARGObserver : Equatable {
         for key in keys {
             var observers = observersDictionary[key] ?? []
             observers.append(observer)
+            print("[ARGModel] Observer for \(observer.info ?? "unknown") added")
+            
+            for observerForDelete in observers {
+                if observerForDelete.object == nil {
+                    observers.remove(at: observers.firstIndex(of: observerForDelete)!)
+                    print("[ARGModel] Observer for \(observerForDelete.info ?? "unknown") removed automatically")
+                }
+            }
+            
             observersDictionary[key] = observers
         }
     }
@@ -125,6 +142,7 @@ class ARGObserver : Equatable {
             for observer in observers {
                 if observer.object == object {
                     observers.remove(at: observers.firstIndex(of: observer)!)
+                    print("[ARGModel] Observer for \(observer.info ?? "unknown") removed manually")
                     observersDictionary[key] = observers
                 }
             }
@@ -140,8 +158,12 @@ class ARGObserver : Equatable {
                     for observer in observers {
                         if observer.object == nil {
                             observers.remove(at: observers.firstIndex(of: observer)!)
+                            print("[ARGModel] Observer for \(observer.info ?? "unknown") removed automatically")
                         } else if !notifiedObservers.contains(observer) {
-                            observer.closure()
+                            DispatchQueue.main.async {
+                                observer.closure()
+                            }
+                            
                             notifiedObservers.append(observer)
                         }
                     }
