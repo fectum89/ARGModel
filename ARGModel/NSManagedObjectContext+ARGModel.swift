@@ -60,23 +60,6 @@ extension NSManagedObjectContext {
         return entityName
     }
     
-//    public func fetchObjects<T: NSManagedObject>(type: T.Type, _ configureRequestClosure: (NSFetchRequest<T>) -> ()) -> [T]? {
-//        let entityName = ARGModel.shared.preferences?.entityMapping?(NSStringFromClass(type)) ?? NSStringFromClass(type)
-//        let request = NSFetchRequest<T>(entityName: entityName)
-//
-//        configureRequestClosure(request)
-//
-//        //request.predicate = predicate
-//
-//        do {
-//            return try self.fetch(request)
-//        } catch {
-//            print(error)
-//        }
-//
-//        return []
-//    }
-    
     public func objectForID<T: NSManagedObject>(_ objectId: NSManagedObjectID, type: T.Type) -> T? {
         do {
             return try self.existingObject(with: objectId) as? T
@@ -90,10 +73,6 @@ extension NSManagedObjectContext {
     public func objectsWith<T: Sequence>(ids: T) -> [NSManagedObject] where T.Element: NSManagedObjectID {
         return ids.map { return objectForID($0, type: NSManagedObject.self)! }
     }
-    
-//    public func objectsWith<T: Sequence, U: NSManagedObject>(ids: T, type: U.Type) -> [U] where T.Element: NSManagedObjectID {
-//        return ids.map { return objectForID($0, type: type) }
-//    }
     
 }
 
@@ -121,11 +100,6 @@ public extension NSManagedObjectContext {
         return self.countOfObjects(type: of as! NSManagedObject.Type)
     }
     
-//    @objc
-//    public func fetchObjects(of type: AnyClass, configureBlock configureRequestClosure: (NSFetchRequest<NSManagedObject>) -> ()) -> [Any]? {
-//        return self.fetchObjects(type: type as! NSManagedObject.Type, configureRequestClosure)
-//    }
-    
     @objc
     func objects(ids: [NSManagedObjectID]) -> [NSManagedObject] {
         return objectsWith(ids: ids)
@@ -135,34 +109,6 @@ public extension NSManagedObjectContext {
     func object(forID id: NSManagedObjectID, of type: AnyClass) -> NSManagedObject? {
         return objectForID(id, type: type as! NSManagedObject.Type)
     }
-    
-//    @objc public func find(objectId: NSManagedObjectID?) -> Any? {
-//        if let objectId = objectId {
-//            return try? self.existingObject(with: objectId)
-//        }
-//        return nil
-//    }
-//
-//    @objc public func findFirst(_ type: AnyClass, key: String, value: Any) -> Any? {
-//        let predicate = NSPredicate(format: "\(key) == %@", argumentArray: [value])
-//        return findFirst(type: type as! NSManagedObject.Type, predicate: predicate)
-//    }
-//
-//    @objc public func find(_ type: AnyClass, key: String, value: Any) -> [Any] {
-//        let predicate = NSPredicate(format: "\(key) == %@", argumentArray: [value])
-//        return find(type: type as! NSManagedObject.Type, predicate: predicate)
-//    }
-//
-//    @objc public func findFirst(_ type: AnyClass, predicate: NSPredicate) -> Any? {
-//        return findFirst(type: type as! NSManagedObject.Type, predicate: predicate)
-//    }
-//
-
-//
-//    @objc public func objects(ids: [NSManagedObjectID]) -> [NSManagedObject] {
-//        return objectsWith(ids: ids)
-//    }
-//
 
 }
 

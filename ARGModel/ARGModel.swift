@@ -10,20 +10,12 @@ import CoreData
 
 @objc public class ARGModelPreferences: NSObject, NSCopying {
     
-    //@objc public var stores: [NSPersistentStoreDescription]?
-    
     @objc public var entityMapping: ((String) -> String)?
     
     @objc public var managedObjectModel: NSManagedObjectModel?
     
-//    override public init() {
-//        //let bundle = Bundle.main
-//        //self.managedObjectModel = NSManagedObjectModel.mergedModel(from: [bundle])
-//    }
-    
     public func copy(with zone: NSZone? = nil) -> Any {
         let preferences = ARGModelPreferences()
-        //preferences.stores = self.stores
         preferences.entityMapping = self.entityMapping
         preferences.managedObjectModel = self.managedObjectModel
         return preferences
