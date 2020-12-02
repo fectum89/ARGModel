@@ -10,13 +10,10 @@ import XCTest
 @testable import ARGModel
 
 class ARGModelTrackerTests: XCTestCase {
-    var tracker: ARGModelTracker!
     var model = ARGModel.shared
     
     override func setUp() {
         super.setUp()
-        
-        tracker = ARGModelTracker()
         
         if model.preferences == nil {
             let preferences = ARGModelPreferences()
@@ -27,10 +24,9 @@ class ARGModelTrackerTests: XCTestCase {
             }
             
             preferences.managedObjectModel = ARGModelTestDataModel.testModel()
-            
-            preferences.stores = [NSPersistentStoreDescription.transientStoreDescription()]
-            
             model.preferences = preferences
+            
+            model.addStores([NSPersistentStoreDescription.transientStoreDescription()])
         }
     }
     
@@ -44,12 +40,12 @@ class ARGModelTrackerTests: XCTestCase {
         let observer2 = NSObject()
         
         //act
-        tracker.addObserver(observer1, for: ["key1", "key2"]) {}
-        tracker.addObserver(observer2, for: ["key1"]) {}
+        model.tracker.addObserver(observer1, for: ["key1", "key2"]) {}
+        model.tracker.addObserver(observer2, for: ["key1"]) {}
         
         //assert
-        let observers1 = tracker.observersDictionary["key1"]
-        let observers2 = tracker.observersDictionary["key2"]
+        let observers1 = model.tracker.observersDictionary["key1"]
+        let observers2 = model.tracker.observersDictionary["key2"]
         
         XCTAssert(observers1?.count == 2)
         XCTAssert(observers2?.count == 1)
@@ -61,13 +57,13 @@ class ARGModelTrackerTests: XCTestCase {
     func testRemoveObserver() {
         //arrange
         let object = NSObject()
-        tracker.addObserver(object, for: ["key1"]) {}
+        model.tracker.addObserver(object, for: ["key1"]) {}
         
         //act
-        tracker.removeObserver(object)
+        model.tracker.removeObserver(object)
         
         //assert
-        XCTAssert(tracker.observersDictionary["key1"]?.count == 0)
+        XCTAssert(model.tracker.observersDictionary["key1"]?.count == 0)
     }
     
     func testPostNotifications() {
@@ -77,7 +73,7 @@ class ARGModelTrackerTests: XCTestCase {
         
         expect.assertForOverFulfill = false
         
-        self.tracker.addObserver(observer, for: ["key1", "key2"]) {
+        model.tracker.addObserver(observer, for: ["key1", "key2"]) {
             invocationCount = invocationCount + 1
             
             XCTAssert(invocationCount == 1)
@@ -85,7 +81,7 @@ class ARGModelTrackerTests: XCTestCase {
             expect.fulfill()
         }
         
-        self.tracker.postNotifications(for: ["key1", "key2"])
+        model.tracker.postNotifications(for: ["key1", "key2"])
         
         waitForExpectations(timeout: 1)
     }

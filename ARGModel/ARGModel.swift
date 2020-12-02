@@ -95,7 +95,7 @@ import CoreData
             do {
                 try self.persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                                                                        configurationName: storeDesc.configuration,
-                                                                       at: storeDesc.url!,
+                                                                       at: storeDesc.url,
                                                                        options: storeDesc.options)
             } catch {
                 return error
@@ -186,8 +186,8 @@ extension NSPersistentStoreDescription {
     
     @objc
     public class func transientStoreDescription () -> NSPersistentStoreDescription {
-        let url = URL(string: "memory://storage")
-        let storeDescription = NSPersistentStoreDescription(url: url!)
+        //let url = URL(string: "memory://storage")
+        let storeDescription = NSPersistentStoreDescription()
         storeDescription.type = NSInMemoryStoreType
         return storeDescription
     }

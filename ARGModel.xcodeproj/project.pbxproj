@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		5DAFBDB01FE2613300775AF5 /* ARGModelTestDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAFBDAF1FE2613300775AF5 /* ARGModelTestDataModel.swift */; };
 		840B82EA20836D1F002732E0 /* NSManagedObject+ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840B82E920836D1F002732E0 /* NSManagedObject+ARGModel.swift */; };
-		840B82EB20836D1F002732E0 /* NSManagedObject+ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840B82E920836D1F002732E0 /* NSManagedObject+ARGModel.swift */; };
 		8443B3651FD7710B006A6F91 /* ARGModelTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8443B3641FD7710B006A6F91 /* ARGModelTrackerTests.swift */; };
 		8449E19A1FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8449E1991FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift */; };
 		8459799F20BA797A0063203D /* NSManagedObject+ARGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840B82E920836D1F002732E0 /* NSManagedObject+ARGModel.swift */; };
@@ -40,7 +39,6 @@
 		8443B3641FD7710B006A6F91 /* ARGModelTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModelTrackerTests.swift; sourceTree = "<group>"; };
 		8449E1991FD0DF250088DA9B /* NSManagedObjectContext+ARGModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+ARGModel.swift"; sourceTree = "<group>"; };
 		845979AA20BA797A0063203D /* ARGModel_mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ARGModel_mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		845979AB20BA797A0063203D /* ARGModel copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ARGModel copy-Info.plist"; path = "/Users/admin/Developing/Mine/Auri/ARGModel/ARGModel copy-Info.plist"; sourceTree = "<absolute>"; };
 		845993471FD3D3EA005B5CCD /* ARGModelTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARGModelTracker.swift; sourceTree = "<group>"; };
 		84CC8D7B1FC9AB24001A9E97 /* ARGModel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ARGModel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84CC8D7E1FC9AB24001A9E97 /* ARGModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARGModel.h; sourceTree = "<group>"; };
@@ -83,7 +81,6 @@
 				84CC8D7D1FC9AB24001A9E97 /* ARGModel */,
 				84CC8D881FC9AB24001A9E97 /* ARGModelTests */,
 				84CC8D7C1FC9AB24001A9E97 /* Products */,
-				845979AB20BA797A0063203D /* ARGModel copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -291,7 +288,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				840B82EB20836D1F002732E0 /* NSManagedObject+ARGModel.swift in Sources */,
 				5DAFBDB01FE2613300775AF5 /* ARGModelTestDataModel.swift in Sources */,
 				8443B3651FD7710B006A6F91 /* ARGModelTrackerTests.swift in Sources */,
 				84CC8D8A1FC9AB24001A9E97 /* ARGModelTests.swift in Sources */,
@@ -319,7 +315,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "ARGModel copy-Info.plist";
+				INFOPLIST_FILE = ARGModel/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.argentum.ARGModel;
@@ -342,7 +338,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "ARGModel copy-Info.plist";
+				INFOPLIST_FILE = ARGModel/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.argentum.ARGModel;

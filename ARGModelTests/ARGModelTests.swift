@@ -8,6 +8,7 @@
 
 import XCTest
 import CoreData
+import ARGModel
 @testable import ARGModel
 
 class ARGModelTests: XCTestCase {
@@ -25,10 +26,10 @@ class ARGModelTests: XCTestCase {
             }
             
             preferences.managedObjectModel = ARGModelTestDataModel.testModel()
-            
-            preferences.stores = [NSPersistentStoreDescription.transientStoreDescription()]
-            
+
             model.preferences = preferences
+            
+            model.addStores([NSPersistentStoreDescription.transientStoreDescription()])
         }
     }
     
